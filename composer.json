@@ -1,0 +1,12 @@
+{
+  "name": "nickelit/html",
+  "description": "HTML Input helpers",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "NOUNI EL BACHIR",
+      "email": "nouni.elbachir@gmail.com"
+    }
+  ]
+}
