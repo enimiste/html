@@ -8,5 +8,15 @@
       "name": "NOUNI EL BACHIR",
       "email": "nouni.elbachir@gmail.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "Com\\NickelIt\\Html\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Com\\NickelIt\\Test\\": "tests"
+    }
+  }
 }
