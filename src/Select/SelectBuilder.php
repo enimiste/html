@@ -58,37 +58,11 @@ class SelectBuilder {
 		$childsChange = '';
 		for ( $i = 0; $i < count( $selects ) - 1; $i ++ ) {
 			/** @var ChildSelect $child */
-			$child     = $selects[ $i ];
-			$childCode = sprintf( "$( '#%s option:selected' ).each(function() {%s", $child->getHtmlId(), PHP_EOL );
-			$childCode .= sprintf( "var selectedCode = $( this ).val() || '';%s", PHP_EOL );
-			$childCode .= sprintf( "var filteredChildren = _.filter(%ss, function(item){ return item.parent == selectedCode; });%s",
-				$child->getDirectChild()->getHtmlId(),
-				PHP_EOL );
-			$childCode .= sprintf( 'jQuery("#%s").empty().append(_.map(filteredChildren, function(item){ return jQuery("<option></option>").attr("value", item.key).text(item.value); }))%s',
-				$child->getDirectChild()->getHtmlId(),
-				PHP_EOL );
-			$childCode .= sprintf( "jQuery( '#%s' ).trigger('change');%s", $child->getDirectChild()->getHtmlId(), PHP_EOL );
-			$childCode .= PHP_EOL . "});";
-			$childsChange .= sprintf( "jQuery('#%s').change(function(event){%s});%s",
-				$child->getHtmlId(),
-				$childCode,
-				PHP_EOL );
+			$child = $selects[ $i ];
+			$childsChange .= $this->_prepareChangeEventListener( $child );
 		}
 
-		$parentCode = sprintf( "$( '#%s option:selected' ).each(function() {%s", $parent->getHtmlId(), PHP_EOL );
-		$parentCode .= sprintf( "var _selectedCode = $( this ).val() || '';%s", PHP_EOL );
-		$parentCode .= sprintf( "var _filteredChildren = _.filter(%ss, function(item){ return item.parent == _selectedCode; });%s",
-			$parent->getDirectChild()->getHtmlId(),
-			PHP_EOL );
-		$parentCode .= sprintf( 'jQuery("#%s").empty().append(_.map(_filteredChildren, function(item){ return jQuery("<option></option>").attr("value", item.key).text(item.value); }))%s',
-			$parent->getDirectChild()->getHtmlId(),
-			PHP_EOL );
-		$parentCode .= sprintf( "jQuery( '#%s' ).trigger('change');%s", $parent->getDirectChild()->getHtmlId(), PHP_EOL );
-		$parentCode .= PHP_EOL . "});";
-		$parentChange = sprintf( "jQuery('#%s').change(function(event){%s});%s",
-			$parent->getHtmlId(),
-			$parentCode,
-			PHP_EOL );
+		$parentChange = $this->_prepareChangeEventListener( $parent );
 		//2
 		$code .= sprintf( " %s%s", $childsChange, PHP_EOL );
 		$code .= sprintf( " %s%s", $parentChange, PHP_EOL );
@@ -130,12 +104,12 @@ class SelectBuilder {
 	}
 
 	/**
-	 * @param $parent
-	 * @param $selects
+	 * @param ParentSelect $parent
+	 * @param array        $selects
 	 *
 	 * @return string
 	 */
-	protected function _prepareJsVars( $parent, $selects ) {
+	protected function _prepareJsVars( ParentSelect $parent, array $selects ) {
 		$jsArrays = 'var ' . $parent->getHtmlId() . 's = [' . rtrim( array_reduce( $parent->getOptions(),
 				function ( $acc, ParentOption $op ) {
 					return $acc . sprintf( '{"key":"%s", "value":"%s"},', $op->getKey(), $op->getValue() );
@@ -153,5 +127,33 @@ class SelectBuilder {
 		}
 
 		return $jsArrays;
+	}
+
+	/**
+	 *
+	 * @param ParentSelect $select
+	 *
+	 * @return string
+	 */
+	protected function _prepareChangeEventListener( ParentSelect $select ) {
+		$htmlId            = $select->getHtmlId();
+		$directChildHtmlId = $select->getDirectChild()->getHtmlId();
+		$childsChange      = '';
+		$childCode         = sprintf( "$( '#%s option:selected' ).each(function() {%s", $htmlId, PHP_EOL );
+		$childCode .= sprintf( "var selectedCode = $( this ).val() || '';%s", PHP_EOL );
+		$childCode .= sprintf( "var filteredChildren = _.filter(%ss, function(item){ return item.parent == selectedCode; });%s",
+			$directChildHtmlId,
+			PHP_EOL );
+		$childCode .= sprintf( 'jQuery("#%s").empty().append(_.map(filteredChildren, function(item){ return jQuery("<option></option>").attr("value", item.key).text(item.value); }))%s',
+			$directChildHtmlId,
+			PHP_EOL );
+		$childCode .= sprintf( "jQuery( '#%s' ).trigger('change');%s", $directChildHtmlId, PHP_EOL );
+		$childCode .= PHP_EOL . "});";
+		$childsChange .= sprintf( "jQuery('#%s').change(function(event){%s});%s",
+			$htmlId,
+			$childCode,
+			PHP_EOL );
+
+		return $childsChange;
 	}
 }
