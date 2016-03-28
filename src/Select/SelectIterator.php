@@ -73,5 +73,10 @@ class SelectIterator {
 			$this->selects );
 	}
 
-
+	/**
+	 * @return array
+	 */
+	public function getSelects() {
+		return $this->selects;
+	}
 }
