@@ -138,8 +138,19 @@ class SelectBuilder {
 	protected function _prepareChangeEventListener( ParentSelect $select ) {
 		$htmlId            = $select->getHtmlId();
 		$directChildHtmlId = $select->getDirectChild()->getHtmlId();
-		$childsChange      = '';
-		$childCode         = sprintf( "$( '#%s option:selected' ).each(function() {%s", $htmlId, PHP_EOL );
+
+		$emptyChildSelect = '';
+		$iterator         = new SelectIterator( $select );
+		$iterator->next();//pour supprimer l'element courant
+
+		/** @var ChildSelect $child */
+		foreach ( $iterator->getSelects() as $child ) {
+			$emptyChildSelect .= sprintf( "jQuery('#%s').empty();%s", $child->getHtmlId(), PHP_EOL );
+		}
+
+
+		$childsChange = '';
+		$childCode    = sprintf( "$( '#%s option:selected' ).each(function() {%s", $htmlId, PHP_EOL );
 		$childCode .= sprintf( "var selectedCode = $( this ).val() || '';%s", PHP_EOL );
 		$childCode .= sprintf( "var filteredChildren = _.filter(%ss, function(item){ return item.parent == selectedCode; });%s",
 			$directChildHtmlId,
@@ -149,8 +160,9 @@ class SelectBuilder {
 			PHP_EOL );
 		$childCode .= sprintf( "jQuery( '#%s' ).trigger('change');%s", $directChildHtmlId, PHP_EOL );
 		$childCode .= PHP_EOL . "});";
-		$childsChange .= sprintf( "jQuery('#%s').change(function(event){%s});%s",
+		$childsChange .= sprintf( "jQuery('#%s').change(function(event){%s%s});%s",
 			$htmlId,
+			$emptyChildSelect,
 			$childCode,
 			PHP_EOL );
 
