@@ -151,7 +151,7 @@ class SelectBuilder {
 
 		$childsChange = '';
 		$childCode    = sprintf( "jQuery( '#%s option:selected' ).each(function() {%s", $htmlId, PHP_EOL );
-		$childCode .= sprintf( "var selectedCode = $( this ).val() || '';%s", PHP_EOL );
+		$childCode .= sprintf( "var selectedCode = jQuery( this ).val() || '';%s", PHP_EOL );
 		$childCode .= sprintf( "var filteredChildren = _.filter(%ss, function(item){ return item.parent == selectedCode; });%s",
 			$directChildHtmlId,
 			PHP_EOL );
