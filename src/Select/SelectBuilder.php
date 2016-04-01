@@ -151,13 +151,25 @@ class SelectBuilder {
 
 		$childsChange = '';
 		$childCode    = sprintf( "jQuery( '#%s option:selected' ).each(function() {%s", $htmlId, PHP_EOL );
+		if ( ! $select->isRoot() ) {
+			;
+			$childCode .= sprintf( "var parentOriginSelectedKey = jQuery('#%s').data('originSelectedKey');",
+				$htmlId );
+		}
+		$childCode .= sprintf( "var currentOriginSelectedKey = jQuery('#%s').data('originSelectedKey');", $directChildHtmlId );
 		$childCode .= sprintf( "var selectedCode = jQuery( this ).val() || '';%s", PHP_EOL );
 		$childCode .= sprintf( "var filteredChildren = _.filter(%ss, function(item){ return item.parent == selectedCode; });%s",
 			$directChildHtmlId,
 			PHP_EOL );
-		$childCode .= sprintf( 'jQuery("#%s").empty().append(_.map(filteredChildren, function(item){ return jQuery("<option></option>").attr("value", item.key).text(item.value); }))%s',
+		$childCode .= sprintf( 'jQuery("#%s").empty().append(_.map(filteredChildren, function(item){ return jQuery("<option></option>").attr("value", item.key).text(item.value); }));%s',
 			$directChildHtmlId,
 			PHP_EOL );
+		if ( ! $select->isRoot() ) {
+			$childCode .= sprintf( "var hasOriginSelected = _.size(_.filter(filteredChildren, function(item){ return item.parent == parentOriginSelectedKey && item.key == currentOriginSelectedKey; })) != 0;" );
+		} else {
+			$childCode .= sprintf( "var hasOriginSelected = _.size(_.filter(filteredChildren, function(item){ return item.key == currentOriginSelectedKey; })) != 0;" );
+		}
+		$childCode .= sprintf( "if(hasOriginSelected){ jQuery( '#%s' ).val(currentOriginSelectedKey); console.log('set selected');}", $directChildHtmlId );
 		$childCode .= sprintf( "jQuery( '#%s' ).trigger('change');%s", $directChildHtmlId, PHP_EOL );
 		$childCode .= PHP_EOL . "});";
 		$childsChange .= sprintf( "jQuery('#%s').change(function(event){%s%s});%s",

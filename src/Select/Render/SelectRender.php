@@ -52,7 +52,7 @@ class SelectRender implements SelectRenderInteface {
 			}
 		}
 
-		return sprintf( '<select name="%s" id="%s" data-origin-selectedKey="%s" %s>%s</select>',
+		return sprintf( '<select name="%s" id="%s" data-origin-selected-key="%s" %s>%s</select>',
 			$htmlName,
 			$this->select->getHtmlId(),
 			$selectedkey,
