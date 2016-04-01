@@ -66,7 +66,7 @@ class SelectBuilder {
 		//2
 		$code .= sprintf( " %s%s", $childsChange, PHP_EOL );
 		$code .= sprintf( " %s%s", $parentChange, PHP_EOL );
-		$code .= sprintf( "jQuery( '#%s' ).val(%ss[0].key);%s", $parent->getHtmlId(), $parent->getHtmlId(), PHP_EOL );
+		//$code .= sprintf( "jQuery( '#%s' ).val(%ss[0].key);%s", $parent->getHtmlId(), $parent->getHtmlId(), PHP_EOL );
 		$code .= sprintf( "jQuery( '#%s' ).trigger('change');", $parent->getHtmlId() );
 
 		return sprintf( "%s%sjQuery(document).ready(function(){ %s%s%s });", $jsArrays, PHP_EOL, PHP_EOL, $code, PHP_EOL );
