@@ -35,6 +35,8 @@ class SelectRender implements SelectRenderInteface {
 	 * @return string
 	 */
 	public function render( $htmlName, $selectedkey = null, array $htmlAttributes = [ ] ) {
+
+		$this->select->setSelectedkey( $selectedkey );
 		$attrs = ' ';
 		foreach ( $htmlAttributes as $key => $v ) {
 			$attrs .= sprintf( ' %s="%s"', $key, $v );
@@ -50,6 +52,11 @@ class SelectRender implements SelectRenderInteface {
 			}
 		}
 
-		return sprintf( '<select name="%s" id="%s" %s>%s</select>', $htmlName, $this->select->getHtmlId(), $attrs, $options );
+		return sprintf( '<select name="%s" id="%s" data-origin-selectedKey="%s" %s>%s</select>',
+			$htmlName,
+			$this->select->getHtmlId(),
+			$selectedkey,
+			$attrs,
+			$options );
 	}
 }

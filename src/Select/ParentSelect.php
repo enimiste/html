@@ -22,6 +22,9 @@ class ParentSelect {
 	/** @var  ChildSelect */
 	protected $directChild;
 
+	/** @var  string */
+	protected $selectedkey;
+
 	/**
 	 * ParentSelect constructor.
 	 *
@@ -32,6 +35,7 @@ class ParentSelect {
 		$this->htmlId      = $htmlId;
 		$this->options     = $options;
 		$this->directChild = null;
+		$this->selectedkey = null;
 	}
 
 
@@ -103,5 +107,28 @@ class ParentSelect {
 	 */
 	public function getOptions() {
 		return $this->options;
+	}
+
+	/**
+	 * @param string $selectedkey
+	 */
+	public function setSelectedkey( $selectedkey ) {
+		$this->selectedkey = $selectedkey;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSelectedkey() {
+		return $this->selectedkey;
+	}
+
+	/**
+	 * Return true if no value is selected before
+	 *
+	 * @return bool
+	 */
+	public function noneSelected() {
+		return is_null( $this->selectedkey );
 	}
 }

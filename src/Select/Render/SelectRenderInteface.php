@@ -10,7 +10,7 @@ namespace Com\NickelIt\Html\Select\Render;
 interface SelectRenderInteface {
 	/**
 	 * @param string $htmlName
-	 * @param null   $selectedkey
+	 * @param string   $selectedkey
 	 * @param array  $htmlAttributes
 	 *
 	 * @return string
