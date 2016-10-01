@@ -11,6 +11,16 @@ use Com\NickelIt\Html\Select\Option\ChildOption;
 use Com\NickelIt\Html\Select\Option\ParentOption;
 use Com\NickelIt\Html\Select\SelectBuilder;
 
+/*
+* SelectBuilder::thisParent(string $select_input_name, array $options)->withChild(string $sub_select_input_name, array $sub_options)...
+* ParentOption(string $id, string $title)
+* ChildOption(string $direct_parent_id, string $id, string $title)
+* 
+* HTML Helper :
+* ->render( string $select_box_name, string $id, array $select_html_attribut = [] );
+*
+* In Your php script or your controller you access the selected values by "select_box_name". The returned value is the $id of the option.
+*/
 $selectBuilder = SelectBuilder::thisParent( 'ville_production',
 	[
 		new ParentOption( '10', 'Rabat' ),
