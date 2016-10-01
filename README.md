@@ -12,7 +12,7 @@ use Com\NickelIt\Html\Select\Option\ParentOption;
 use Com\NickelIt\Html\Select\SelectBuilder;
 
 /*
-* SelectBuilder::thisParent(string $select_input_name, array $options)->withChild(string $sub_select_input_name, array $sub_options)...
+* SelectBuilder::thisParent(string $select_input_id, array $options)->withChild(string $sub_select_input_id, array $sub_options)...
 * ParentOption(string $id, string $title)
 * ChildOption(string $direct_parent_id, string $id, string $title)
 * 
